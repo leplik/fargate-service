@@ -16,6 +16,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: 'cfn-modules: Fargate service'
 # cfn-modules:implements()
 Parameters:
+  DeploymentType:
+    Description: 'Deployment Controller, ECS or Blue/Green CodeDeploy. Allowed Values: CODE_DEPLOY | ECS | EXTERNAL'
+    Type: String
+    Default: 'ECS'
   VpcModule:
     Description: 'Stack name of vpc module.'
     Type: String
@@ -568,6 +572,7 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 50
+      DeploymentController: !Ref DeploymentType
       DesiredCount: !Ref DesiredCount
       HealthCheckGracePeriodSeconds: !If [HasTargetModule, !Ref HealthCheckGracePeriodSeconds, !Ref 'AWS::NoValue']
       LaunchType: FARGATE
